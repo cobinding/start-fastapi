@@ -83,3 +83,9 @@ def update_todo_handler(
         todo["is_done"] = is_done
         return todo
     return {}
+
+@app.delete("/todos/{todo_id}")
+def delete_todo_handler(todo_id: int):
+    # default를 None으로 넣어준다.
+    todo_data.pop(todo_id, None)
+    return todo_data
