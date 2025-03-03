@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from pydantic import BaseModel
 app = FastAPI()
 
@@ -66,3 +66,20 @@ def create_todo_handler(request: CreateTodoRequest):
     todo_data[request.id] = request.dict()
     return todo_data[request.id]
 
+"""
+[PATCH] id를 받아서 `is_done`을 수정
+* 하나의 컬럼만 Body 형태로 수정하는 것 : fastapi.Body(embed=True) !!
+embed=True라는게 요청 본문이 JSON으로 감싸져 있다는 뜻
+
+=> 결론! patch를 통해서 is_done:bool을 받고, 수정하는 api
+"""
+@app.patch("/todos/{todo_id}")
+def update_todo_handler(
+    todo_id: int,
+    is_done: bool = Body(..., embed=True),
+):
+    todo = todo_data.get(todo_id)
+    if todo:
+        todo["is_done"] = is_done
+        return todo
+    return {}
