@@ -31,7 +31,8 @@ todo_data = {
 def get_todos_handler() -> list:
     return list(todo_data.values())
 
-"""Query Parameter(/todos?query=apple)
+""" 
+[GET] Query Parameter(/todos?query=apple)
 직접 작성하지 않고, 인자를 통해 정의
 """
 @app.get("/todos")
@@ -43,14 +44,17 @@ def get_todos_handler(order: str | None = None):
         return result[::-1]
     return result
 
-# ID를 통한 상세 조회
+"""
+[GET] ID를 통한 상세 조회
+"""
 @app.get("/todos/{todo_id}")
 def get_todo_handler(todo_id: int):
     return todo_data.get(todo_id, {})
 
-# post API로 todo 생성
-# `pydentic` 모듈로 쉽게 Request Body 처리
-
+"""
+[POST] post API로 todo 생성
+ `pydentic` 모듈로 쉽게 Request Body 처리
+"""
 # request record 값
 class CreateTodoRequest(BaseModel):
     id: int
@@ -61,3 +65,4 @@ class CreateTodoRequest(BaseModel):
 def create_todo_handler(request: CreateTodoRequest):
     todo_data[request.id] = request.dict()
     return todo_data[request.id]
+
